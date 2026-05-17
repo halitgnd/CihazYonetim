@@ -1,0 +1,140 @@
+@model IEnumerable<CihazYonetim.Models.Cihazlar>
+@{
+    Layout = "_LayoutDashboard";
+    ViewBag.Title = "Cihazlar Listesi";
+}
+
+@section SayfayaOzelcss {
+    <link rel="stylesheet" href="~/css/cihazlarliste.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/scroll.css" asp-append-version="true" />
+}
+
+@section SayfayaOzelIkon {
+    <link rel="icon" href="~/smart-house.png" type="image/png" />
+}
+
+<div style="display: flex; flex-direction: column; align-items: center; width: 100%; margin-top: 40px;">
+    
+    <div style="width: 85%; max-width: 1000px;">
+        
+        <div style="margin-bottom: 15px;">
+            <h3 style="color: #2ecc71; margin: 0; padding-left: 10px; border-left: 4px solid #2ecc71;">Sistemdeki Cihazlar</h3>
+        </div>
+
+        <div class="tablo-kapsayici" style="padding: 0 !important; overflow: hidden !important; border-radius: 8px; border: 1px solid #34495e; background: white; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);">
+            
+            <div class="ozel-scroll-alani">
+                <table class="tablo" style="table-layout: fixed; width: 100%; border-collapse: separate !important; border-spacing: 0; margin: 0 !important;">
+                    <colgroup>
+                        <col style="width: 50px;">  <col style="width: 25%;">   <col style="width: 25%;">   <col style="width: 20%;">   <col style="width: 30%;">   </colgroup>
+
+                    <thead>
+                    <tr>
+                        <th style="text-align: center;">#</th>
+                        <th style="text-align: left; padding-left: 20px;">CİHAZ ADI</th>
+                        <th style="text-align: left; padding-left: 20px;">SAHİBİ</th>
+                        <th style="text-align: center;">DURUM</th>
+                        <th style="text-align: center;">İŞLEMLER</th>
+                    </tr>
+                    </thead>
+                    
+                    <tbody>
+                    @if (Model?.Any() == true)
+                    {
+                        int sayac = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td style="text-align: center; font-weight: bold; color: #7f8c8d;">@(sayac++)</td>
+                                <td style="text-align: left; padding-left: 20px; font-weight: bold; color: #2c3e50;">@item.CihazName</td>
+                                <td style="text-align: left; padding-left: 20px;">@(item.User?.Username ?? "Atanmadı")</td>
+                                <td style="text-align: center;">
+                                    @{
+                                        var statusClass = item.Durum.ToString().ToLower();
+                                    }
+                                    <span class="badge-status status-@statusClass">
+                                        @item.Durum
+                                    </span>
+                                </td>
+                                <td style="text-align: center;">
+                                    @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                                    {
+                                        <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">
+                                            <button type="button" class="btn-icon btn-edit duzenle-btn" 
+                                                    data-id="@item.Id" 
+                                                    data-cihazadi="@item.CihazName" 
+                                                    data-durum="@((int)item.Durum)" 
+                                                    data-userid="@item.UserId">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+
+                                            <form asp-action="Delete" asp-route-id="@item.Id" method="post" style="margin: 0;">
+                                                <button type="submit" class="btn-icon btn-delete" onclick="return confirm('Silinsin mi usta?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span style="color: #e74c3c; font-weight: bold; font-size: 11px;">YETKİ YOK</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="background-color: #f8f9fa; border-top: 1px solid #ddd; text-align: center; font-weight: bold; padding: 12px; color: #2c3e50; font-size: 14px;">
+                Sistemdeki Toplam Cihaz Sayısı: @(Model?.Count() ?? 0)
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="duzenleModal" class="modal-arkaplan">
+    <div class="modal-kutu">
+        <div class="modal-baslik">
+            <h3 style="margin: 0; color: #3498db;">Cihaz Düzenle</h3>
+            <span class="modal-kapat" id="duzenleModalKapat">&times;</span>
+        </div>
+        <form asp-action="Edit" method="post" class="modal-form">
+            <input type="hidden" name="Id" id="edit-id" />
+            <label>Cihaz Adı</label>
+            <input type="text" name="CihazName" id="edit-cihazadi" required maxlength="100" />
+            <label>Durum</label>
+            <select name="Durum" id="edit-durum" required>
+                <option value="1">Online</option>
+                <option value="0">Offline</option>
+                <option value="2">Arıza</option>
+                <option value="3">Bakım</option>
+            </select>
+            <label>Sahibi (Kullanıcı ID)</label>
+            <input type="number" name="UserId" id="edit-userid" required />
+            <div style="text-align: right; margin-top: 20px;">
+                <button type="submit" class="btn-icon btn-edit" style="width: 100%; height: 40px; font-weight: bold;">GÜNCELLE</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const duzenleModal = document.getElementById("duzenleModal");
+            document.querySelectorAll(".duzenle-btn").forEach(btn => {
+                btn.onclick = function() {
+                    document.getElementById("edit-id").value = this.dataset.id;
+                    document.getElementById("edit-cihazadi").value = this.dataset.cihazadi;
+                    document.getElementById("edit-durum").value = this.dataset.durum;
+                    document.getElementById("edit-userid").value = this.dataset.userid;
+                    duzenleModal.style.display = "block";
+                };
+            });
+            document.getElementById("duzenleModalKapat").onclick = () => duzenleModal.style.display = "none";
+            window.onclick = (e) => { if (e.target === duzenleModal) duzenleModal.style.display = "none"; };
+        });
+    </script>
+}

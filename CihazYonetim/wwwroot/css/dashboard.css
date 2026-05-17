@@ -1,0 +1,176 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    overflow: hidden; /* Dış tarafta kayma olmasın */
+}
+main{
+    display: flex;
+    flex-direction: column; /* İçerikleri yukarıdan aşağı diz */
+    align-items: center;    /* Yatayda tam merkeze getir */
+    padding-top: 50px;      /* Navbar'dan biraz nefes payı bırak */
+    background-color: #1a1d21 !important; /* O kör eden beyazlığı artık tamamen gömelim */
+    min-height: calc(100vh - 120px);
+}
+/* Üst Bar */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 70px;
+    width: 100%;
+    background: rgba(18, 21, 21, 0.98);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    color: white;
+    z-index: 100;
+}
+.navbar-brand{
+    display: flex;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    justify-content: flex-end;
+}
+
+.navbar-button button {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;transition: all 0.3s ease;
+    font-size: 14px;
+
+}
+.navbar-button button:hover {
+    background-color: #27ae60; /* Üzerine gelince bir tık koyulaşsın */
+    transform: scale(1.05); /* Hafif büyüme efekti */
+    box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+}
+
+
+/* Sidebar: Artık Footer'ın içine girmeyecek */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 70px; /* Navbar bittiği an başlar */
+    width: 160px;
+    height: calc(100vh - 120px); /* 100vh - (70px Nav + 50px Footer) */
+    background: rgb(27, 26, 26, 0.93);
+    overflow-y: auto; /* Menü uzarsa kendi içinde kaysın */
+    padding: 20px 0;
+    z-index: 50;
+}
+
+/* Ana İçerik: Sidebar'ın altında kalmaması için margin-left şart */
+main {
+    margin-left: 160px;
+    margin-top: 70px;
+    margin-bottom: 50px;
+    padding: 20px;
+    height: calc(100vh - 120px);
+    overflow-y: auto; /* Sayfa içeriği burada kaysın */
+    background-color: #ffffff;
+}
+
+/* Alt Bar: En önde durur */
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+footer p{
+    color: #fff;
+    margin: 0;
+    font-size: 10px;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Menü İçi Yazılar */
+.sidebar-ic p {
+    color: #888;
+    padding: 10px 20px;
+    margin: 0;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.sidebar-ic p:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+}
+.sidebar-ic i {
+    font-size: 28px; /* İkonu belirgin ve büyük yap */
+    margin-bottom: 8px; /* Yazıyla arasına mesafe koy */
+    display: block; /* Blok eleman yap ki ortalama şaşmasın */
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+}
+.sidebar hr{
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    height: 1px;
+    margin: 10px 20px;
+}
+/* SİDEBAR İÇİNDEKİ TÜM LİNKLERE ZORUNLU MÜDAHALE */
+.sidebar a {
+    text-decoration: none !important;
+    color: #b0b3b8 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 15px 0 !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+/* Sidebar içindeki İkonlar */
+.sidebar a i {
+    font-size: 28px !important;
+    margin-bottom: 8px !important;
+    color: #b0b3b8 !important;
+}
+
+/* Sidebar içindeki Yazılar */
+.sidebar a p {
+    margin: 0 !important;
+    font-size: 14px !important;
+    color: #b0b3b8 !important;
+    font-family: inherit !important;
+    background-color: transparent !important; /* İŞTE O ÇİRKİN KAREYİ YOK EDEN KOD */
+}
+
+/* =========================================
+   HOVER (FAREYLE ÜZERİNE GELİNCE)
+   ========================================= */
+
+/* 1. Sadece ana kutunun (A etiketinin) arka planı parlasın */
+.sidebar a:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* 2. Yazı ve ikonların KENDİSİ beyaza dönsün (Kutuyu tekrar boyamasın) */
+.sidebar a:hover,
+.sidebar a:hover i,
+.sidebar a:hover p {
+    color: #ffffff !important;
+}

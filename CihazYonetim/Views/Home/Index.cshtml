@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Cihaz Yönetim Giriş";
+}
+@{
+    Layout= "_LoginLayout";
+} 
+@section SayfayaOzelIkon {
+    <link href="login.png" rel="icon" type="image/x-icon" />
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>@ViewData</title>
+</head>
+<body>
+    <div class="secim-kapsayici">
+        <div class="secim-baslik">
+            <h1>Sistem'e Hoş Geldiniz</h1>
+            <p>Giriş yaparak veya kayıt olarak cihaz yönetim paneline erişebilirsiniz.</p>
+        </div>    
+        <div class="anasecim">
+            <a asp-controller="Auth" asp-action="Register" class="btn">Kayıt Ol</a>
+            <a asp-controller="Auth" asp-action="Login" class="btn">Giriş</a>
+        </div>
+    </div>
+</body>
+</html>

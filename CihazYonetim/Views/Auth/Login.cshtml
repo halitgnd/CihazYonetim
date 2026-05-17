@@ -1,0 +1,51 @@
+@{
+    Layout="_LoginLayout";
+}
+@{
+    ViewData["Title"] = "Cihaz Yönetim Giriş";
+}
+@section SayfayaOzelIkon {
+    <link href="~/login.png" rel="icon" type="image/x-icon" />
+}
+<div class="login-kapsayici">
+    <div class="secim-baslik">
+        <h1>Kullanıcı Girişi</h1>
+        <p>Lütfen sistem bilgilerinizi giriniz.</p>
+    </div>
+    <form asp-controller="Auth" asp-action="Login" method="post">
+        <div class="login-ic">
+            <input type="text" name="Username" placeholder="Kullanıcı Adı" class="input-alani" required/>
+        </div>
+        <div class="login-ic">
+            <input type="password" name="Password" placeholder="Şifre" class="input-alani" required/>
+        </div>
+        <div class="alt-secenekler">
+            <div class="hatirla-kapsayici">
+                <input type="checkbox" id="beniHatirla" name="RememberMe" value="true"/>
+                <label for="beniHatirla">Beni Hatırla</label>
+            </div>
+            <div class="kayit-kapsayici">
+                <a asp-controller="Auth" asp-action="Register" class="kayit-linki">Kayıt Ol</a>
+            </div>
+        </div>
+        <button type="submit" class="login-btn tam-genislik">Giriş Yap</button>
+    </form>
+</div>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            @if (ViewBag.Hata != null)
+            {
+                <text>
+                Swal.fire({
+                    title: 'Giriş Başarısız!',
+                    text: '@Html.Raw(ViewBag.Hata)',
+                    icon: 'error',
+                    confirmButtonText: 'Tekrar Dene',
+                    confirmButtonColor: '#DD3333FF'
+                });
+                </text>
+            }
+        });
+    </script>
+}

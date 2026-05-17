@@ -1,0 +1,88 @@
+﻿<!doctype html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Cihaz Yönetim Paneli</title>
+    @await RenderSectionAsync("SayfayaOzelIkon", required: false)
+    @await RenderSectionAsync("SayfayaOzelArkaplan", required: false)
+    @await RenderSectionAsync("SayfayaOzelCss", required: false)
+    <link rel="stylesheet" href="~/css/Tasarim.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/lib/fontawesome/all.min.css"/>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav_container">
+                <div class="logo">
+                    <i class="fa-solid fa-shield-halved" style="color: #2ecc71; margin-right: 8px;"></i>
+                    Cihaz Yönetim
+                </div>
+
+                <ul class="nav_ul">
+                    @if (User.IsInRole("admin"))
+                    {
+                        <li><button class="btn-nav btn-yeni"><i class="fas fa-plus"></i> Yeni Cihaz</button></li>
+                    }
+                    <li>
+                        <button class="btn-nav btn-online">
+                            <span class="status-dot"></span> Online <span class="counter">@ViewBag.Online</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="btn-nav btn-offline">
+                            <span class="status-dot"></span> Offline <span class="counter">@ViewBag.Offline</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="btn-nav btn-ariza">
+                            <span class="status-dot pulse-red"></span> Arızalı <span class="counter">@ViewBag.Ariza</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="btn-nav btn-bakim">
+                            <span class="status-dot pulse-orange"></span> Bakım <span class="counter">@ViewBag.Bakim</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="btn-nav btn-toplam">
+                            <span class="status-dot"></span> Toplam <span class="counter">@ViewBag.Cihaz_Sayisi</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="btn-nav btn-hiz">
+                            <span class="status-dot pulse-purple"></span> <span id="canli-hiz">78.5 Mbps</span>
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="user-corner">
+                    <div class="user-info">
+                        <span class="user-name">@User.Identity?.Name</span>
+                        <span class="user-role">@(User.IsInRole("admin") ? "BAŞ YÖNETİCİ" : "OPERATÖR")</span>
+                    </div>
+                    <i class="fa-solid fa-circle-user profile-icon"></i>
+                    <form asp-controller="Auth" asp-action="Logout" method="post" style="margin:0;">
+                        <button type="submit" class="logout-btn" title="Güvenli Çıkış">
+                            <i class="fa-solid fa-power-off"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    @await RenderSectionAsync("SayfayaOzelAside", required: false)
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Cihaz Yönetim Sistemi - Tüm Hakları Saklıdır.</p>         
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

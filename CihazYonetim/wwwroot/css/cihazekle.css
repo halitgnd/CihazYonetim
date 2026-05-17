@@ -1,0 +1,63 @@
+.simulasyon-alani {
+    background-color: transparent !important;
+    margin-top: 20px;
+    height: calc(100vh - 150px);
+    margin-left: 200px;
+    position: relative !important;
+    /* KRİTİK: Alanın kendisi taşmaları kesmesin diye visible yaptık */
+    overflow: visible !important;
+    z-index: 10;
+}
+
+.cihaz-daire {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    position: absolute !important;
+    z-index: 100 !important;
+    cursor: grab;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* BALYOZ BURADA: A ve B butonlarının dışarı taşmasına izin verir, KESMEZ! */
+    overflow: visible !important;
+}
+
+.kucuk-daire {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    position: absolute;
+    color: white;
+    font-size: 13px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    /* Daireden (100) daha üstte olmalı */
+    z-index: 110 !important;
+    transition: transform 0.2s;
+}
+
+.kucuk-daire:hover { transform: scale(1.2); filter: brightness(1.1); }
+
+/* Pozisyonları dışarıya doğru ittik (-8px) ki daha net görünsünler */
+.ariza-btn { background-color: #e74c3c; top: -8px; right: -8px; }
+.bakim-btn { background-color: #f1c40f; top: -8px; left: -8px; }
+
+.cihaz-isim-etiket {
+    position: absolute;
+    bottom: -40px;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+    background-color: rgba(0,0,0,0.7);
+    padding: 3px 10px;
+    border-radius: 6px;
+    z-index: 90;
+    pointer-events: none;
+}

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/lib/fontawesome/all.min.css" />
+    @await RenderSectionAsync("SayfayaOzelcss", required: false)
+    @await RenderSectionAsync("SayfayaOzelIkon", required: false)
+</head>
+<body>
+<header>
+    <nav class="navbar" style="display: flex; justify-content: space-between; align-items: center; padding: 0 25px;">
+        
+        <div class="navbar-brand" style="font-size: 1.2rem; font-weight: bold; color: white;">
+            <i class="fa-solid fa-shield-halved" style="margin-right: 10px; color: #2ecc71;"></i>Cihaz Yönetim Paneli
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 25px;">
+            
+            <div class="navbar-button">
+                @await RenderSectionAsync("SayfayaOzelNavbarButton", required: false)
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 15px; border-left: 1px solid rgba(255, 255, 255, 0.15); padding-left: 20px; height: 100%;">
+        
+                <div style="display: flex; flex-direction: column; align-items: flex-end; justify-content: center;">
+                    <span style="color: #fff; font-size: 15px; font-weight: 600; letter-spacing: 0.5px; line-height: 1;">@User.Identity?.Name</span>
+                    <span style="color: #0dcaf0; font-size: 10px; font-weight: 700; letter-spacing: 1px; margin-top: 5px;">
+                        @(User.IsInRole("admin") ? "BAŞ YÖNETİCİ" : "OPERATÖR")
+                    </span>
+                </div>
+        
+                <i class="fa-solid fa-circle-user" style="font-size: 34px; color: #adb5bd;"></i>
+
+                <form asp-controller="Auth" asp-action="Logout" method="post" style="margin: 0; padding-left: 5px;">
+                    <button type="submit" style="background: rgba(220, 53, 69, 0.1); border: 1px solid rgba(220, 53, 69, 0.3); border-radius: 8px; color: #ff4757; cursor: pointer; font-size: 16px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;" title="Sistemden Çıkış Yap" onmouseover="this.style.background='#dc3545'; this.style.color='#fff';" onmouseout="this.style.background='rgba(220, 53, 69, 0.1)'; this.style.color='#ff4757';">
+                        <i class="fa-solid fa-power-off"></i>
+                    </button>
+                </form>
+            </div>
+            
+        </div>
+
+    </nav>
+</header>
+
+<div class="container-main">
+    <aside>
+        <div class="sidebar">
+            <div class="sidebar-ic">
+                <a asp-controller="Dashboard" asp-action="Index" class="sidebar-a">
+                    <i class="fa-solid fa-house"></i>
+                    <p>Ana Sayfa</p>
+                </a>
+                <hr>
+            </div>
+    
+            <div class="sidebar-ic">
+                <a asp-controller="Cihaz" asp-action="Index" class="sidebar-a">
+                <i class="fa-solid fa-microchip"></i>
+                <p>Simülasyon</p></a>
+                <hr>
+            </div>
+
+            @if (User.IsInRole("admin")) {
+                <div class="sidebar-ic">
+                <a asp-controller="Kullanicilar" asp-action="Index" class="sidebar-a">
+                <i class="fa-solid fa-users"></i>
+                    <p>Kullanıcılar</p>
+                    </a>
+                    <hr>
+                </div>
+            }
+
+            <div class="sidebar-ic">
+                <a asp-controller="Cihazlarliste" asp-action="Index" class="sidebar-a">
+                <i class="fa fa-desktop" aria-hidden="true"></i>
+               <p>Cihazlar</p></a>
+                <hr>
+            </div>
+            <div class="sidebar-ic">
+                <a asp-controller="Raporlar" asp-action="Index" class="sidebar-a">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <p>Raporlar</p>
+                </a>
+                <hr>
+            </div>
+        </div>
+    </aside>
+
+    <main>
+        @RenderBody()
+    </main>
+</div>
+
+<footer>
+    <p>&copy; 2026 Cihaz Yönetim Sistemi - Tüm Hakları Saklıdır.</p>
+</footer>
+
+<script src="~/lib/sweetalert2/sweetalert2.all.min.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

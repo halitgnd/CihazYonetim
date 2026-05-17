@@ -1,0 +1,204 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    background-color: #dbdbdb;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+main{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex:1;
+}
+.anasecim{
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+    align-items: center;
+    justify-content: center;
+}
+.secim-kapsayici{
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 450px;
+}
+.secim-baslik{
+    margin-bottom: 30px;
+}
+.secim-kapsayici h1{
+    color: #212529;
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.secim-baslik p {
+    color: #6c757d;
+    font-size: 15px;
+    line-height: 1.5;
+}
+.btn{
+    text-decoration: none;
+    padding: 15px 40px;
+    background-color: #1872ca;
+    color: white; 
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: 0.3s ease;
+    box-shadow: 0 5px 14px rgba(0,0,0,0.7);
+}
+.btn:hover{
+    background: #2c6798;    
+    transform: translateY(-2px);
+}
+header{
+    width: 100%;
+    background-color: #212529;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+.navbar-giris{
+    padding: 15px 0;
+}
+.nav_container-giris{
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    padding: 0 30px;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+}
+.logo-giris{
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: bold;
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: 0.3s ease;
+}
+.logo-giris:hover{
+    color: #a3c4f3;
+}
+.navbar-logo-img{
+    height:35px;
+    width:auto;
+}
+.login-kapsayici{
+    text-align: center;
+    max-width: 420px;
+    width: 100%;
+    background-color: #ffffff;
+    padding: 40px 35px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+.secim-baslik h1 {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: #212529;
+    font-size: 26px;
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+.secim-baslik p {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: #6c757d;
+    font-size: 15px;
+    margin-bottom: 30px;
+}
+.input-alani{
+    display: block;
+    margin-bottom: 10px;
+    width: 100%;
+    font-size: 15px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    border: solid 1px #ced4da;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    padding: 14px 15px;
+    outline: none;
+}
+.input-alani:focus{
+    background-color: #ffffff;
+    border-color: #1872ca;
+    box-shadow: 0 0 0 4px rgba(24, 114, 202, 0.15);
+}
+.login-ic{
+    margin-bottom: 20px;
+    text-align: left;
+}
+.login-btn{
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: #212529;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    background-color: #1872ca;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(24, 114, 202, 0.3);    
+}
+.login-btn:hover {
+    background-color: #125699;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(24, 114, 202, 0.4);
+}
+.tam-genislik {
+    width: 100%;
+    display: block;
+    padding: 14px 0;
+    margin-top: 10px;
+}
+.hatirla-kapsayici {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Kutucuk ile yazı arası boşluk */
+    text-align: left;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+.hatirla-kapsayici label {
+    font-size: 14px;
+    color: #6c757d;
+    cursor: pointer; /* Yazının üstüne gelince fare el işaretine dönsün ki tıklanabilir olduğu anlaşılsın */
+    display: flex;
+}
+.kayit-linki {
+    color: #1872ca; /* Butonun mavisiyle aynı ton */
+    text-decoration: none; /* Alt çizgiyi baştan kaldırıyoruz */
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.kayit-linki:hover {
+    color: #125699; /* Üstüne gelince bir tık koyulaşsın */
+    text-decoration: underline; /* Üstüne gelince alt çizgi çıksın ki tıklandığı belli olsun */
+}
+.alt-secenekler {
+    display: flex;
+    justify-content: space-between; /* Biri tam sola, diğeri tam sağa */
+    align-items: center;
+    margin-bottom: 25px; /* Butonla arasındaki boşluğu buradan veriyoruz */
+}
+.kayit-linki:hover {
+    align-items: center;
+    text-decoration: none;
+    transform: translateY(-1px);
+}

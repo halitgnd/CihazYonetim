@@ -1,0 +1,105 @@
+@{
+    Layout = "_LayoutDashboard";
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+@section SayfayaOzelcss {
+    <link rel="stylesheet" href="~/css/dashboarindex.css" asp-append-version="true"/>
+}
+@section SayfayaOzelIkon
+{
+   <link rel="icon" href="~/home-page.png" type="image/png" />}
+
+<div class="kutu-kapsayici">
+    <div class="kutu online-card">
+        <div class="kutu-ikon"><i class="fas fa-signal"></i></div>
+        <div class="kutu-bilgi">
+            <p>Online</p>
+            <h3>@ViewBag.Online</h3>
+        </div>
+    </div>
+
+    <div class="kutu offline-card">
+        <div class="kutu-ikon"><i class="fas fa-power-off"></i></div>
+        <div class="kutu-bilgi">
+            <p>Offline</p>
+            <h3>@ViewBag.Offline</h3>
+        </div>
+    </div>
+
+    <div class="kutu ariza-card">
+        <div class="kutu-ikon"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="kutu-bilgi">
+            <p>Arıza</p>
+            <h3>@ViewBag.Ariza</h3>
+        </div>
+    </div>
+
+    <div class="kutu bakim-card">
+        <div class="kutu-ikon"><i class="fas fa-tools"></i></div>
+        <div class="kutu-bilgi">
+            <p>Bakım</p>
+            <h3>@ViewBag.Bakim</h3>
+        </div>
+    </div>
+</div>
+
+<div class="log-konteynir">
+    <div class="log-ust-bar">
+        <div class="log-baslik"><i class="fas fa-terminal"></i> SİSTEM HAREKETLERİ</div>
+        <div class="log-noktalar"><span></span><span></span><span></span></div>
+    </div>
+    <div class="log-icerik" id="logAkis">
+        @if (ViewBag.Loglar != null)
+        {
+            foreach (var log in ViewBag.Loglar)
+            {
+                <div class="log-satir">
+                    <span class="log-zaman">@log.Zaman</span>
+                    <span class="log-etiket @log.Tip">@log.Tip.ToUpper()</span>
+                    <span class="log-mesaj">@log.Mesaj</span>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const dumenLoglar = [
+            "Veri paketleri optimize edildi.",
+            "Güvenlik duvarı taraması tamamlandı.",
+            "Sistem çekirdeği stabil durumda.",
+            "Yedekleme sunucusu senkronize edildi.",
+            "Yeni IP adresi tanımlandı: 192.168.1.44"
+        ];
+
+        function canliLogEkle() {
+            const konteynir = document.getElementById("logAkis");
+            const zaman = new Date().toLocaleTimeString();
+            const mesaj = dumenLoglar[Math.floor(Math.random() * dumenLoglar.length)];
+            
+            const yeniSatir = `
+                <div class="log-satir" style="opacity: 0; transform: translateX(-15px); transition: all 0.4s;">
+                    <span class="log-zaman">${zaman}</span>
+                    <span class="log-etiket info">SİSTEM</span>
+                    <span class="log-mesaj">${mesaj}</span>
+                </div>
+            `;
+            
+            konteynir.insertAdjacentHTML('afterbegin', yeniSatir);
+            
+            setTimeout(() => {
+                konteynir.firstElementChild.style.opacity = "1";
+                konteynir.firstElementChild.style.transform = "translateX(0)";
+            }, 50);
+
+            if (konteynir.children.length > 7) {
+                konteynir.lastElementChild.remove();
+            }
+        }
+
+        // Her 7 saniyede bir dümenden canlılık kat
+        setInterval(canliLogEkle, 7000);
+    </script>
+}

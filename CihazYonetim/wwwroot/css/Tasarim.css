@@ -1,0 +1,103 @@
+﻿* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; background-color: #1a1d21; font-family: sans-serif; color: #ecf0f1; }
+header { width: 100%; position: fixed; top: 0; z-index: 999; height: 70px; }
+
+main { flex: 1; padding-top: 80px; padding-bottom: 120px; display: flex; flex-direction: column; }
+footer { background: #000; color: #fff; height: 50px; position: fixed; bottom: 0; width: 100%; display: flex; align-items: center; justify-content: center; z-index: 1000; font-size: 11px; }
+
+.navbar { background: rgba(15, 20, 25, 0.95); height: 70px; display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.nav_container { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 0 20px; }
+.nav_ul { display: flex; gap: 10px; list-style: none; margin: 0; padding: 0; flex: 1; justify-content: center; }
+
+.btn-nav { border: none; border-radius: 8px; cursor: pointer; padding: 8px 12px; color: white; font-weight: bold; display: flex; align-items: center; gap: 8px; font-size: 12px; height: 38px; }
+.btn-yeni { background: #0d6efd; }
+.btn-online { background: #198754; }
+.btn-offline { background: #6c757d; }
+.btn-ariza { background: #dc3545; }
+.btn-bakim { background: #fd7e14; }
+.btn-toplam { background: #3498db; }
+.btn-hiz { background: #6f42c1; min-width: 120px; justify-content: center; }
+
+.status-dot { height: 8px; width: 8px; border-radius: 50%; display: inline-block; background: #fff; box-shadow: 0 0 8px #fff; }
+.counter { background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 5px; font-size: 11px; margin-left: 5px; }
+
+.user-corner { display: flex; align-items: center; gap: 12px; border-left: 1px solid #444; padding-left: 15px; }
+.user-info { text-align: right; }
+.user-name { color: #fff; font-size: 14px; font-weight: bold; display: block; }
+.user-role { color: #0dcaf0; font-size: 9px; font-weight: bold; }
+.logout-btn { background: rgba(220,53,69,0.2); border: 1px solid #dc3545; color: #ff4757; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+
+/* Animasyonlar */
+.pulse-red { animation: blink 1s infinite; box-shadow: 0 0 12px #ff4757 !important; background: #ff4757 !important; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+/* YENİ CİHAZ PANELİ - BAŞLANGIÇTA GİZLİ */
+/* YENİ CİHAZ PANELİ - MERKEZİ VE DERLİ TOPLU */
+.sim-panel-compact {
+  display: none;
+  background: rgba(30, 34, 40, 0.98) !important;
+  border: 1px solid rgba(46, 204, 113, 0.4) !important;
+  border-radius: 12px;
+  padding: 15px 25px;
+  z-index: 1000 !important;
+  position: absolute !important;
+
+  /* MERKEZE ALMA AYARI */
+  top: 90px !important; /* Yukarıdan biraz esneme payı */
+  left: 50% !important; /* Ekranın tam ortasına iter */
+  transform: translateX(-50%) !important; /* Milimetrik olarak tam merkeze kilitler */
+
+  /* KUTUYU DARALTMA AYARI */
+  width: 750px !important; /* O eski devasa 850px genişliği daralttık */
+  min-width: unset !important;
+
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  flex-direction: column;
+  gap: 12px;
+}
+.panel-ust { color: #2ecc71; font-size: 14px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
+.sim-form-row { display: flex; gap: 10px; align-items: center; }
+
+.sim-input-focus, .sim-select, .sim-select-ozel {
+  background: #121417 !important;
+  border: 1px solid #34495e !important;
+  color: #ecf0f1 !important;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  flex: 1;
+}
+
+.btn-sim-submit { background: #2ecc71; color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+
+/* SİMÜLASYON ALANI */
+.simulasyon-alani {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 120px);
+  margin-left: 200px;
+  overflow: visible !important;
+}
+
+.cihaz-daire {
+  width: 100px; height: 100px; border-radius: 50%;
+  position: absolute !important; z-index: 100 !important;
+  display: flex; justify-content: center; align-items: center;
+  cursor: grab; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+  /* KRİTİK: A ve B butonlarını kesmez */
+  overflow: visible !important;
+}
+
+.kucuk-daire {
+  width: 28px; height: 28px; border-radius: 50%;
+  position: absolute; color: white; font-size: 12px;
+  display: flex; justify-content: center; align-items: center;
+  cursor: pointer; font-weight: bold; z-index: 110;
+}
+.ariza-btn { background-color: #e74c3c; top: -8px; right: -8px; }
+.bakim-btn { background-color: #f1c40f; top: -8px; left: -8px; }
+
+.cihaz-isim-etiket {
+  position: absolute; bottom: -35px; color: white; font-size: 12px; font-weight: bold;
+  background-color: rgba(0,0,0,0.7); padding: 3px 10px; border-radius: 6px; white-space: nowrap;
+}

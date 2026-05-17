@@ -1,0 +1,18 @@
+.ozel-scroll-alani {
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.ozel-scroll-alani::-webkit-scrollbar { width: 6px; }
+.ozel-scroll-alani::-webkit-scrollbar-track { background: transparent; }
+.ozel-scroll-alani::-webkit-scrollbar-thumb { background: #2ecc71; border-radius: 10px; }
+
+/* Sticky Başlık - Titremeyi ve kaymayı önleyen ayar */
+.tablo thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-clip: padding-box;
+}

@@ -1,0 +1,51 @@
+.tablo {
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    background-color: white;
+}
+
+.tablo th {
+    background-color: #34495e;
+    color: white !important;
+    padding: 15px 10px;
+    font-size: 13px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #2c3e50;
+}
+
+.tablo td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+/* Zebra geçişi */
+.tablo tbody tr:nth-child(even) { background-color: #f9f9f9; }
+.tablo tbody tr:hover { background-color: #f1f1f1 !important; }
+
+/* RENKLİ BUTONLAR */
+.birinci-i, .ikinci-i {
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.birinci-i { background-color: #e74c3c; } /* KIRMIZI */
+.ikinci-i { background-color: #3498db; }  /* MAVİ */
+
+.birinci-i:hover { background-color: #c0392b; transform: scale(1.1); }
+.ikinci-i:hover { background-color: #2980b9; transform: scale(1.1); }
+
+/* MODAL */
+.modal-arkaplan { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); }
+.modal-kutu { background: #1e2124; margin: 10% auto; padding: 25px; width: 380px; border-radius: 12px; color: white; border: 1px solid #444; }
+.modal-baslik { display: flex; justify-content: space-between; border-bottom: 1px solid #444; padding-bottom: 10px; }
+.modal-kapat { cursor: pointer; color: #777; font-size: 24px; }
+.modal-form input, .modal-form select { width: 100%; padding: 10px; margin-top: 5px; background: #2b2f33; border: 1px solid #444; color: white; border-radius: 6px; box-sizing: border-box; }

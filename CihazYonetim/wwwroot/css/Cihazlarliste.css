@@ -1,0 +1,158 @@
+/* =======================================================
+   CİHAZLAR LİSTESİ - NİZAM-I CEDİD SÜRÜMÜ (DAR & İKONLU)
+   ======================================================= */
+
+/* 1. DIŞ KAPSAYICI - Sayfayı ortalar ve arka planı ayarlar */
+.cihaz-liste-wrapper {
+    padding: 40px 15px;
+    background-color: #1a1d20 !important;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* 2. TABLO KASASI - Genişliği daraltan ve gölgeyi veren ana kutu */
+.tablo-kapsayici {
+    background-color: #ffffff !important;
+    border-radius: 12px;
+    width: 85%; /* Sayfanın %85'ini kaplar */
+    max-width: 1000px; /* 1000px'den daha fazla yayılmaz, dar durur */
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    border: 1px solid #34495e;
+}
+
+/* 3. TABLO YAPISI - Kaymayı önleyen kritik ayarlar */
+.tablo {
+    width: 100%;
+    border-collapse: separate !important;
+    border-spacing: 0;
+    table-layout: fixed; /* Kolonları mühürler */
+    font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+/* 4. BAŞLIKLAR (THEAD) */
+.tablo thead th {
+    background-color: #34495e;
+    color: #ffffff !important;
+    padding: 15px 10px;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-clip: padding-box;
+    border-bottom: 2px solid #2c3e50;
+}
+
+/* 5. SATIRLAR VE HÜCRELER */
+.tablo tbody tr:nth-child(odd) { background-color: #f8f9fa; }
+.tablo tbody tr:nth-child(even) { background-color: #ffffff; }
+.tablo tbody tr:hover { background-color: #f1f3f5 !important; transition: 0.2s; }
+
+.tablo td {
+    padding: 12px 10px;
+    text-align: center;
+    color: #2c3e50;
+    font-weight: 500;
+    vertical-align: middle;
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* 6. DURUM ROZETLERİ (BADGES) */
+.badge-status {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 80px;
+    justify-content: center;
+}
+
+.status-online { background-color: #2ecc71; box-shadow: 0 0 5px rgba(46, 204, 113, 0.4); }
+.status-offline { background-color: #95a5a6; }
+.status-bakim { background-color: #f1c40f; color: #333; }
+.status-ariza {
+    background-color: #e74c3c;
+    box-shadow: 0 0 8px rgba(231, 76, 60, 0.5);
+    animation: pulse-red 1.5s infinite;
+}
+
+/* 7. İKON BUTONLAR - Kare, küçük ve renkli */
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+.btn-edit { background-color: #3498db; }
+.btn-delete { background-color: #e74c3c; }
+
+.btn-edit:hover { background-color: #2980b9; transform: scale(1.1); }
+.btn-delete:hover { background-color: #c0392b; transform: scale(1.1); }
+
+/* 8. MODAL TASARIMI - Karanlık tema */
+.modal-arkaplan {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+}
+
+.modal-kutu {
+    background-color: #1e2124;
+    margin: 10% auto;
+    padding: 25px;
+    border: 1px solid #444;
+    width: 380px;
+    border-radius: 12px;
+    color: white;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.9);
+}
+
+.modal-baslik {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+    padding-bottom: 15px;
+}
+
+.modal-form label { display: block; margin-top: 15px; font-size: 13px; color: #bbb; }
+.modal-form input, .modal-form select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    background-color: #2b2f33;
+    border: 1px solid #444;
+    color: white;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+/* Animasyon */
+@keyframes pulse-red {
+    0% { transform: scale(0.95); }
+    70% { transform: scale(1); }
+    100% { transform: scale(0.95); }
+}

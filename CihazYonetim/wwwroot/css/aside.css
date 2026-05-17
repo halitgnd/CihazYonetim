@@ -1,0 +1,83 @@
+*{
+    box-sizing: border-box;
+}
+.sidebar-ic p {
+    color: #888;
+    padding: 10px 20px;
+    margin: 0;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.sidebar-ic p:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+}
+.sidebar-ic i {
+    font-size: 28px; /* İkonu belirgin ve büyük yap */
+    margin-bottom: 8px; /* Yazıyla arasına mesafe koy */
+    display: block; /* Blok eleman yap ki ortalama şaşmasın */
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+}
+.sidebar hr{
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    height: 1px;
+    margin: 10px 20px;
+}
+/* SİDEBAR İÇİNDEKİ TÜM LİNKLERE ZORUNLU MÜDAHALE */
+.sidebar a {
+    text-decoration: none !important;
+    color: #b0b3b8 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 15px 0 !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+/* Sidebar içindeki İkonlar */
+.sidebar a i {
+    font-size: 28px !important;
+    margin-bottom: 8px !important;
+    color: #b0b3b8 !important;
+}
+
+/* Sidebar içindeki Yazılar */
+.sidebar a p {
+    margin: 0 !important;
+    font-size: 14px !important;
+    color: #b0b3b8 !important;
+    font-family: inherit !important;
+    background-color: transparent !important; /* İŞTE O ÇİRKİN KAREYİ YOK EDEN KOD */
+}
+
+/* =========================================
+   HOVER (FAREYLE ÜZERİNE GELİNCE)
+   ========================================= */
+
+/* 1. Sadece ana kutunun (A etiketinin) arka planı parlasın */
+.sidebar a:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* 2. Yazı ve ikonların KENDİSİ beyaza dönsün (Kutuyu tekrar boyamasın) */
+.sidebar a:hover,
+.sidebar a:hover i,
+.sidebar a:hover p {
+    color: #ffffff !important;
+}
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 70px; /* Navbar bittiği an başlar */
+    width: 160px;
+    height: calc(100vh - 120px); /* 100vh - (70px Nav + 50px Footer) */
+    background: rgb(27, 26, 26, 0.93);
+    overflow-y: auto; /* Menü uzarsa kendi içinde kaysın */
+    padding: 20px 0;
+    z-index: 50;
+}
