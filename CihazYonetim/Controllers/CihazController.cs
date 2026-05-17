@@ -44,19 +44,20 @@ public class CihazController : Controller
         var cihazlar = await _context.Cihazlar.Include(c => c.User).ToListAsync();
         return View(cihazlar);
     }
+
     [Authorize(Roles = "admin")]
     [HttpPost]
-    public async Task<JsonResult> Ekle(Cihazlar yeniCihaz)
+    public async Task<IActionResult> Ekle(Cihazlar yeniCihaz) 
     {
         try
         {
-            if (yeniCihaz != null)
+            if (yeniCihaz != null && !string.IsNullOrEmpty(yeniCihaz.CihazName))
             {
-                // 1. Önce cihazı veritabanına kaydet (Id oluşması için şart)
+                // 1. Önce cihazı veritabanına kaydet
                 _context.Cihazlar.Add(yeniCihaz);
                 await _context.SaveChangesAsync();
 
-                // 2. YENİ BALYOZ: Cihaz eklendiği an Log defterine yazdır!
+                // 2. Cihaz eklendiği an Log defterine yazdır!
                 var yeniLog = new CihazLog 
                 {
                     CihazId = yeniCihaz.Id,
@@ -64,30 +65,46 @@ public class CihazController : Controller
                     Detay = $"{yeniCihaz.CihazName} isimli cihaz ağa dahil edildi.",
                     LogTarihi = DateTime.Now
                 };
-                
+            
                 _context.CihazLoglar.Add(yeniLog);
                 await _context.SaveChangesAsync();
 
-                return Json(new { success = true });
+                // === BALYOZ: BUMERANG TAKTİĞİ ===
+                string geldigiSayfa = Request.Headers["Referer"].ToString();
+                if (!string.IsNullOrEmpty(geldigiSayfa))
+                {
+                    return Redirect(geldigiSayfa);
+                }
             }
-            return Json(new { success = false, message = "Cihaz verisi boş geldi!" });
+        
+            return RedirectToAction("Index");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Json(new { success = false, message = ex.Message });
+            return RedirectToAction("Index");
         }
     }
 
     [HttpPost]
-    public IActionResult PozisyonGuncelle(int cihazId, double x, double y)
+    public async Task<IActionResult> PozisyonGuncelle(int cihazId, double x, double y)
     {
-        var cihaz = _context.Cihazlar.FirstOrDefault(c => c.Id == cihazId);
+        // Cihazı sahibiyle birlikte buluyoruz
+        var cihaz = await _context.Cihazlar.Include(c => c.User).FirstOrDefaultAsync(c => c.Id == cihazId);
+        
         if (cihaz != null)
         {
-            cihaz.PositionX = x;
-            cihaz.PositionY = y;
-            _context.SaveChanges(); // Pozisyon için loga gerek yok, veritabanı şişmesin
-            return Json(new { success = true });
+            // === GÜVENLİK DUVARI: Başkasının cihazını sürükleyip bırakamasın ===
+            bool isAdmin = User.IsInRole("admin");
+            bool isOwner = cihaz.User?.Username == User.Identity?.Name;
+
+            if (isAdmin || isOwner)
+            {
+                cihaz.PositionX = x;
+                cihaz.PositionY = y;
+                await _context.SaveChangesAsync(); // Pozisyon için loga gerek yok
+                return Json(new { success = true });
+            }
+            return Json(new { success = false, message = "Geçit yok! Sadece kendi cihazını taşıyabilirsin." });
         }
         return Json(new { success = false, message = "Cihaz bulunamadı." });
     }
@@ -95,8 +112,18 @@ public class CihazController : Controller
     [HttpPost]
     public async Task<JsonResult> DurumGuncelle(int cihazId, int yeniDurum)
     {
-        var cihaz = await _context.Cihazlar.FindAsync(cihazId);
+        // Cihazı sahibiyle birlikte buluyoruz
+        var cihaz = await _context.Cihazlar.Include(c => c.User).FirstOrDefaultAsync(c => c.Id == cihazId);
         if (cihaz == null) return Json(new { success = false, message = "Cihaz bulunamadı!" });
+
+        // === GÜVENLİK DUVARI: Başkasının şalterini indiremesin ===
+        bool isAdmin = User.IsInRole("admin");
+        bool isOwner = cihaz.User?.Username == User.Identity?.Name;
+
+        if (!isAdmin && !isOwner)
+        {
+            return Json(new { success = false, message = "Geçit yok! Sadece kendi zimmetindeki cihazın durumunu değiştirebilirsin." });
+        }
 
         // 1. Cihazın kendi durumunu güncelliyoruz
         cihaz.Durum = (CihazDurumu)yeniDurum;

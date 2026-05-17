@@ -1,37 +1,95 @@
-﻿* { box-sizing: border-box; }
-html, body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; background-color: #1a1d21; font-family: sans-serif; color: #ecf0f1; }
+﻿/* === GENEL SIFIRLAMA VE ZEMİN === */
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column;
+  background-color: #1a1d21; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #ecf0f1;
+}
+
+/* === ÜST KISIM VE ÇERÇEVE === */
 header { width: 100%; position: fixed; top: 0; z-index: 999; height: 70px; }
 
-main { flex: 1; padding-top: 80px; padding-bottom: 120px; display: flex; flex-direction: column; }
-footer { background: #000; color: #fff; height: 50px; position: fixed; bottom: 0; width: 100%; display: flex; align-items: center; justify-content: center; z-index: 1000; font-size: 11px; }
+.navbar {
+  background-color: rgba(15, 20, 25, 0.95);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.7);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+  height: 70px; display: flex; align-items: center;
+}
 
-.navbar { background: rgba(15, 20, 25, 0.95); height: 70px; display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
-.nav_container { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 0 20px; }
-.nav_ul { display: flex; gap: 10px; list-style: none; margin: 0; padding: 0; flex: 1; justify-content: center; }
+.nav_container { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 0 25px; }
 
-.btn-nav { border: none; border-radius: 8px; cursor: pointer; padding: 8px 12px; color: white; font-weight: bold; display: flex; align-items: center; gap: 8px; font-size: 12px; height: 38px; }
-.btn-yeni { background: #0d6efd; }
-.btn-online { background: #198754; }
-.btn-offline { background: #6c757d; }
-.btn-ariza { background: #dc3545; }
-.btn-bakim { background: #fd7e14; }
-.btn-toplam { background: #3498db; }
-.btn-hiz { background: #6f42c1; min-width: 120px; justify-content: center; }
+.logo { color: #fff; font-weight: 800; font-size: 1.2rem; letter-spacing: 1px; min-width: 180px; text-transform: uppercase; }
 
-.status-dot { height: 8px; width: 8px; border-radius: 50%; display: inline-block; background: #fff; box-shadow: 0 0 8px #fff; }
-.counter { background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 5px; font-size: 11px; margin-left: 5px; }
+.nav_ul { display: flex; align-items: center; list-style: none; margin: 0; padding: 0; gap: 10px; flex: 1; justify-content: center; }
 
-.user-corner { display: flex; align-items: center; gap: 12px; border-left: 1px solid #444; padding-left: 15px; }
-.user-info { text-align: right; }
-.user-name { color: #fff; font-size: 14px; font-weight: bold; display: block; }
-.user-role { color: #0dcaf0; font-size: 9px; font-weight: bold; }
-.logout-btn { background: rgba(220,53,69,0.2); border: 1px solid #dc3545; color: #ff4757; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+/* === ÜST DÜĞMELER === */
+.btn-nav {
+  border: none; border-radius: 8px; cursor: pointer; padding: 8px 14px; color: white; font-weight: bold;
+  display: flex; align-items: center; gap: 8px; transition: 0.3s; font-size: 12px; height: 38px; white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
 
-/* Animasyonlar */
-.pulse-red { animation: blink 1s infinite; box-shadow: 0 0 12px #ff4757 !important; background: #ff4757 !important; }
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-/* YENİ CİHAZ PANELİ - BAŞLANGIÇTA GİZLİ */
-/* YENİ CİHAZ PANELİ - MERKEZİ VE DERLİ TOPLU */
+.btn-nav:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+/* Düğme Arka Planları */
+.btn-yeni { background-color: #0d6efd; }
+.btn-online { background-color: #198754; }
+.btn-offline { background-color: #6c757d; }
+.btn-ariza { background-color: #dc3545; }
+.btn-bakim { background-color: #fd7e14; }
+.btn-toplam { background-color: #3498db; }
+.btn-hiz { background-color: #6f42c1; min-width: 120px; justify-content: center; border: 1px solid rgba(255,255,255,0.1); }
+
+/* === CANLI NOKTALAR VE PARLAMA EFEKTLERİ === */
+.status-dot {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 3px;
+}
+
+/* Fosforlu Neon Renkler */
+.btn-online .status-dot { background-color: #51ff00; box-shadow: 0 0 10px #51ff00; }
+.btn-offline .status-dot { background-color: #dee2e6; box-shadow: 0 0 5px #dee2e6; }
+.btn-ariza .status-dot { background-color: #ff9494; box-shadow: 0 0 12px #ff9494; }
+.btn-bakim .status-dot { background-color: #ffea00; box-shadow: 0 0 12px #ffea00; }
+.btn-toplam .status-dot { background-color: #8ce1ff; box-shadow: 0 0 8px #8ce1ff; }
+.btn-hiz .status-dot { background-color: #e5c9ff; box-shadow: 0 0 12px #e5c9ff; }
+
+.counter { background: rgba(0, 0, 0, 0.4); padding: 2px 7px; border-radius: 6px; font-size: 11px; margin-left: 5px; border: 1px solid rgba(255,255,255,0.1); }
+
+/* === YENİLENMİŞ NEON IŞIKLARI === */
+.pulse-red { animation: blink-red 1s infinite; }
+@keyframes blink-red {
+  0%, 100% { opacity: 1; box-shadow: 0 0 15px #ff9494; }
+  50% { opacity: 0.4; box-shadow: none; }
+}
+
+.pulse-orange { animation: blink-orange 1.2s infinite; }
+@keyframes blink-orange {
+  0%, 100% { opacity: 1; box-shadow: 0 0 15px #ffea00; }
+  50% { opacity: 0.4; box-shadow: none; }
+}
+
+.pulse-purple { animation: blink-purple 0.8s infinite; }
+@keyframes blink-purple {
+  0%, 100% { opacity: 1; box-shadow: 0 0 15px #e5c9ff; }
+  50% { opacity: 0.4; box-shadow: none; }
+}
+
+/* === SAĞ ÜST KULLANICI KÖŞESİ === */
+.user-corner { display: flex; align-items: center; gap: 12px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 20px; margin-left: 10px; }
+.user-info { display: flex; flex-direction: column; align-items: flex-end; }
+.user-name { color: #fff; font-size: 14px; font-weight: 600; line-height: 1; }
+.user-role { color: #0dcaf0; font-size: 9px; font-weight: 800; letter-spacing: 0.5px; margin-top: 4px; }
+.profile-icon { font-size: 28px; color: #adb5bd; }
+.logout-btn { background: rgba(220, 53, 69, 0.2); border: 1px solid #dc3545; color: #ff4757; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
+.logout-btn:hover { background: #dc3545; color: #fff; }
+
+/* === YENİ CİHAZ EKLEME KUTUSU (TAM MERKEZ) === */
 .sim-panel-compact {
   display: none;
   background: rgba(30, 34, 40, 0.98) !important;
@@ -39,15 +97,14 @@ footer { background: #000; color: #fff; height: 50px; position: fixed; bottom: 0
   border-radius: 12px;
   padding: 15px 25px;
   z-index: 1000 !important;
-  position: absolute !important;
 
-  /* MERKEZE ALMA AYARI */
-  top: 90px !important; /* Yukarıdan biraz esneme payı */
-  left: 50% !important; /* Ekranın tam ortasına iter */
-  transform: translateX(-50%) !important; /* Milimetrik olarak tam merkeze kilitler */
+  /* Ekranın tam ortasına çivileme */
+  position: fixed !important;
+  top: 100px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
 
-  /* KUTUYU DARALTMA AYARI */
-  width: 750px !important; /* O eski devasa 850px genişliği daralttık */
+  width: 750px !important;
   min-width: unset !important;
 
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
@@ -55,6 +112,7 @@ footer { background: #000; color: #fff; height: 50px; position: fixed; bottom: 0
   flex-direction: column;
   gap: 12px;
 }
+
 .panel-ust { color: #2ecc71; font-size: 14px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
 .sim-form-row { display: flex; gap: 10px; align-items: center; }
 
@@ -67,10 +125,25 @@ footer { background: #000; color: #fff; height: 50px; position: fixed; bottom: 0
   font-size: 13px;
   flex: 1;
 }
-
 .btn-sim-submit { background: #2ecc71; color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; }
 
-/* SİMÜLASYON ALANI */
+/* === ORTA ALAN VE ALT KISIM DENGESİ === */
+main {
+  flex: 1;
+  padding-top: 90px;
+  padding-bottom: 120px; /* Dairelerin altta kalmasını önler */
+  display: flex;
+  flex-direction: column;
+}
+
+footer {
+  background-color: #000; color: #acb6bd; text-align: center; height: 50px;
+  width: 100%; border-top: 1px solid rgba(255, 255, 255, 0.05);
+  position: fixed; bottom: 0; display: flex; align-items: center; justify-content: center; z-index: 1000;
+}
+footer p { margin: 0; font-size: 11px; font-weight: bold; }
+
+/* === CİHAZ SAHASI VE DAİRELER === */
 .simulasyon-alani {
   position: relative;
   width: 100%;
@@ -84,8 +157,7 @@ footer { background: #000; color: #fff; height: 50px; position: fixed; bottom: 0
   position: absolute !important; z-index: 100 !important;
   display: flex; justify-content: center; align-items: center;
   cursor: grab; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-  /* KRİTİK: A ve B butonlarını kesmez */
-  overflow: visible !important;
+  overflow: visible !important; /* Düğmeleri kesmez */
 }
 
 .kucuk-daire {

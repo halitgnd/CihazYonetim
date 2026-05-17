@@ -29,7 +29,7 @@
 {
     <div id="yeniCihazPaneli" class="sim-panel-compact">
         <div class="panel-ust"><i class="fa-solid fa-plus-circle"></i> Yeni Cihaz Tanımla</div>
-        <form id="zrhliForm" class="sim-form-row" asp-controller="Cihazlarliste" asp-action="Add" method="post">
+        <form id="zrhliForm" class="sim-form-row" asp-controller="Cihaz" asp-action="Ekle" method="post">
             <input type="text" name="CihazName" class="sim-input-focus" placeholder="Cihaz Adı" required>
             <select name="UserId" class="sim-select" required>
                 <option value="">Operatör Seç...</option>
@@ -64,6 +64,11 @@
     {
         foreach (var item in Model)
         {
+            // === YETKİ VE SAHİPLİK KONTROLÜ (GÜVENLİK DUVARI) ===
+            bool isOwner = item.User?.Username == User.Identity?.Name;
+            bool isAdmin = User.IsInRole("admin");
+            bool yetkiliMi = isOwner || isAdmin; // Baş yöneticiyse veya kendi cihazıysa tam yetkili
+
             string bgRenk = (int)item.Durum == 1 ? "#198754" : 
                             (int)item.Durum == 0 ? "#6c757d" : 
                             (int)item.Durum == 2 ? "#dc3545" : "#fd7e14";  
@@ -80,11 +85,20 @@
             string pozisyon = (item.PositionX > 0 || item.PositionY > 0) 
                               ? $"left: {item.PositionX}px; top: {item.PositionY}px;" : "";
 
-            <div class="cihaz-daire" data-id="@item.Id" data-durum="@((int)item.Durum)" data-turu="@((int)item.Turu)" style="@pozisyon background-color: @bgRenk; box-shadow: @golge; z-index: 100;">
+            // data-yetki özelliğini buraya çaktık, JS tarafı bu veriyi okuyup adamı engelleyecek
+            <div class="cihaz-daire" data-id="@item.Id" data-yetki="@(yetkiliMi ? "var" : "yok")" data-durum="@((int)item.Durum)" data-turu="@((int)item.Turu)" style="@pozisyon background-color: @bgRenk; box-shadow: @golge; z-index: 100;">
+                
+                @* === YILDIZ İŞARETİ: Sadece cihazın sahibine görünür === *@
+                @if (isOwner)
+                {
+                    <i class="fa-solid fa-star" style="position: absolute; top: -15px; color: #ffea00; font-size: 20px; z-index: 120; text-shadow: 0 0 10px #ffea00;" title="Sizin Zimmetinizde"></i>
+                }
+
                 <div class="kucuk-daire bakim-btn" title="Bakım">B</div>
                 <div class="kucuk-daire ariza-btn" title="Arıza">A</div>
                 
-                <div class="cihaz-icerik" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; cursor: pointer;" title="Durumu değiştirmek için tıkla">
+                @* === İMLEC KONTROLÜ: Yetki yoksa fareyi 'yasak' (not-allowed) işaretine çevirir === *@
+                <div class="cihaz-icerik" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; cursor: @(yetkiliMi ? "pointer" : "not-allowed");" title="@(yetkiliMi ? "Durumu değiştirmek için tıkla" : "Geçit yok: Bu cihaza müdahale yetkiniz bulunmuyor")">
                     <i class="fa-solid @ikon" style="font-size: 28px; margin-bottom: 5px; color: #fff;"></i>
                     <span class="daire-merkez" style="font-size: 13px; font-weight: bold; color: #fff; pointer-events: none;">@yazi</span>
                 </div>

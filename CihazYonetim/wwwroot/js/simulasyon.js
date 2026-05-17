@@ -1,9 +1,21 @@
 $(document).ready(function () {
+    let surukleniyorMu = false;
 
+    // === 1. PANELİ AÇIP KAPATAN TETİKÇİ ===
+    $(".btn-yeni").on("click", function(e) {
+        e.preventDefault();
+        let panel = $("#yeniCihazPaneli");
+        if (panel.is(":visible")) {
+            panel.fadeOut(200);
+        } else {
+            panel.fadeIn(200).css("display", "flex");
+        }
+    });
+
+    // === 2. POZİSYON RASTGELE DAĞITICI ===
     let arenaWidth = $(".simulasyon-alani").width();
     let arenaHeight = $(".simulasyon-alani").height();
 
-    // 0. POZİSYON RASTGELE DAĞITICI
     $(".cihaz-daire").each(function () {
         if ($(this).css("left") === "0px" || $(this).css("left") === "auto") {
             let rastgeleX = Math.floor(Math.random() * (arenaWidth - 120));
@@ -15,23 +27,19 @@ $(document).ready(function () {
         }
     });
 
-    let surukleniyorMu = false;
-
-    // --- 15 SANİYEDE BİR HIZI DALGALANDIR ---
+    // === 3. AĞ ÇİZİMİ VE DİNAMİK HIZ MOTORU ===
     setInterval(function() {
         let rastgeleHiz = (Math.random() * (95.0 - 35.0) + 35.0).toFixed(1);
         $("#canli-hiz").text(rastgeleHiz + " Mbps");
         agBaglantilariniCiz();
-    }, 15000); // 15000 milisaniye = 15 saniye (Gözü yormaz, takılma yapmaz)
+    }, 15000);
 
-    // --- AĞ ÇİZİMİ VE DİNAMİK HIZ MOTORU ---
     function agBaglantilariniCiz() {
         const svg = $("#network-cizgileri");
         svg.empty();
 
         let hizYazisi = $("#canli-hiz").text().replace(/[^0-9.,]/g, '').replace(',', '.');
         let veriHizi = parseFloat(hizYazisi) || 50;
-
         let animasyonSuresi = Math.max(0.15, 50 / veriHizi);
 
         let routerlar = $(".cihaz-daire[data-turu='0']");
@@ -43,9 +51,7 @@ $(document).ready(function () {
             let cihaz = $(this);
             let ucX = cihaz.position().left + (cihaz.width() / 2);
             let ucY = cihaz.position().top + (cihaz.height() / 2);
-            let cihazDurum = cihaz.attr("data-durum");
 
-            // EN YAKIN ROUTER RADARI
             let enYakinRouter = null;
             let enKisaMesafe = Infinity;
 
@@ -62,39 +68,38 @@ $(document).ready(function () {
                 }
             });
 
-            if (!enYakinRouter) return;
+            if (enYakinRouter) {
+                let merkezX = enYakinRouter.position().left + (enYakinRouter.width() / 2);
+                let merkezY = enYakinRouter.position().top + (enYakinRouter.height() / 2);
 
-            let merkezX = enYakinRouter.position().left + (enYakinRouter.width() / 2);
-            let merkezY = enYakinRouter.position().top + (enYakinRouter.height() / 2);
-            let routerDurum = enYakinRouter.attr("data-durum");
+                let cihazDurum = cihaz.attr("data-durum");
+                let routerDurum = enYakinRouter.attr("data-durum");
+                let baglantiAktifMi = (cihazDurum == 1 && routerDurum == 1);
 
-            // ANA ŞALTER KONTROLÜ
-            let baglantiAktifMi = (cihazDurum == 1 && routerDurum == 1);
+                let cizgiRengi = baglantiAktifMi ? "rgba(46, 204, 113, 0.8)" : "rgba(255, 255, 255, 0.1)";
+                let kalinlik = baglantiAktifMi ? "3" : "1";
 
-            let cizgiRengi = baglantiAktifMi ? "rgba(46, 204, 113, 0.8)" : "rgba(255, 255, 255, 0.1)";
-            let kalinlik = baglantiAktifMi ? "3" : "1";
+                let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', merkezX);
+                line.setAttribute('y1', merkezY);
+                line.setAttribute('x2', ucX);
+                line.setAttribute('y2', ucY);
+                line.setAttribute('stroke', cizgiRengi);
+                line.setAttribute('stroke-width', kalinlik);
 
-            let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            line.setAttribute('x1', merkezX);
-            line.setAttribute('y1', merkezY);
-            line.setAttribute('x2', ucX);
-            line.setAttribute('y2', ucY);
-            line.setAttribute('stroke', cizgiRengi);
-            line.setAttribute('stroke-width', kalinlik);
-
-            if (baglantiAktifMi) {
-                line.setAttribute('stroke-dasharray', '8, 8');
-                line.setAttribute('class', 'cizgi-aktif');
-                line.style.animationDuration = animasyonSuresi + "s";
+                if (baglantiAktifMi) {
+                    line.setAttribute('stroke-dasharray', '8, 8');
+                    line.setAttribute('class', 'cizgi-aktif');
+                    line.style.animationDuration = animasyonSuresi + "s";
+                }
+                svg.append(line);
             }
-
-            svg.append(line);
         });
     }
 
     agBaglantilariniCiz();
 
-    // SÜRÜKLEME
+    // === 4. SÜRÜKLE BIRAK SİSTEMİ ===
     $(".cihaz-daire").draggable({
         containment: ".simulasyon-alani",
         scroll: false,
@@ -105,19 +110,14 @@ $(document).ready(function () {
         drag: function() { agBaglantilariniCiz(); },
         stop: function(event, ui) {
             $(this).css("z-index", 100);
-            let cihazId = $(this).attr("data-id");
-            let yeniX = ui.position.left;
-            let yeniY = ui.position.top;
-
-            $.post('/Cihaz/PozisyonGuncelle', { cihazId: cihazId, x: yeniX, y: yeniY });
+            $.post('/Cihaz/PozisyonGuncelle', { cihazId: $(this).attr("data-id"), x: ui.position.left, y: ui.position.top });
             setTimeout(function() { surukleniyorMu = false; }, 100);
         }
     });
 
-    // NAVBAR
+    // === 5. NAVBAR SAYAC GÜNCELLEYİCİ ===
     function navbarGuncelle(eskiDurum, yeniDurum) {
         if(eskiDurum === yeniDurum) return;
-
         const idMap = { 0: "#nav-offline", 1: "#nav-online", 2: "#nav-ariza", 3: "#nav-bakim" };
         let eskiSayacEl = $(idMap[eskiDurum]);
         let yeniSayacEl = $(idMap[yeniDurum]);
@@ -126,138 +126,69 @@ $(document).ready(function () {
         if(yeniSayacEl.length) yeniSayacEl.text((parseInt(yeniSayacEl.text()) || 0) + 1);
     }
 
-    // TIKLAMA VE DURUM DEĞİŞTİRME
-    $(document).on("click", ".cihaz-icerik", function (e) {
-        if (surukleniyorMu) return;
+    // === 6. TIKLAMA VE DURUM DEĞİŞTİRME (KESİN YENİLENMEZ) ===
+    $(document).on("click", ".cihaz-icerik, .ariza-btn, .bakim-btn", function (e) {
+        e.preventDefault(); // BALYOZ BURADA: Sayfanın yenilenmesini kesin olarak yasaklar.
+
+        if (surukleniyorMu) return; // Sürüklerken tıklamayı engeller
 
         let top = $(this).closest(".cihaz-daire");
+
+        // GÜVENLİK DUVARI: Yetkisi yoksa anında kes!
+        if (top.attr("data-yetki") === "yok") {
+            alert("Dikkat: Sadece kendi zimmetindeki cihazlara müdahale edebilirsin!");
+            return;
+        }
+
         let cihazId = top.attr("data-id");
         let mevcutDurum = parseInt(top.attr("data-durum"));
-        let yeniDurum = (mevcutDurum === 1) ? 0 : 1;
+        let yeniDurum;
 
-        navbarGuncelle(mevcutDurum, yeniDurum);
-
-        if (yeniDurum === 1) {
-            top.css({"background-color": "#198754", "box-shadow": "0 0 20px #198754"});
-            top.find(".daire-merkez").text("Online");
+        // Tıklanan yere göre aksiyon belirle
+        if ($(this).hasClass("ariza-btn")) {
+            yeniDurum = 2; // A butonuna basıldı
+        } else if ($(this).hasClass("bakim-btn")) {
+            yeniDurum = 3; // B butonuna basıldı
         } else {
-            top.css({"background-color": "#6c757d", "box-shadow": "none"});
-            top.find(".daire-merkez").text("Offline");
+            // Merkeze basıldıysa Online <-> Offline geçişi yap
+            yeniDurum = (mevcutDurum === 1) ? 0 : 1;
         }
 
-        top.attr("data-durum", yeniDurum);
-        durumDegistirAJAX(cihazId, yeniDurum);
-        agBaglantilariniCiz();
-    });
+        if (mevcutDurum === yeniDurum) return; // Zaten o durumdaysa yorma sistemi
 
-    // ARIZA BUTONU [A]
-    $(document).on("click", ".ariza-btn", function (e) {
-        if (surukleniyorMu) return;
-
-        let top = $(this).closest(".cihaz-daire");
-        let cihazId = top.attr("data-id");
-        let mevcutDurum = parseInt(top.attr("data-durum"));
-
-        if (mevcutDurum !== 2) {
-            navbarGuncelle(mevcutDurum, 2);
-            top.css({"background-color": "#dc3545", "box-shadow": "0 0 25px #dc3545"});
-            top.find(".daire-merkez").text("Arıza");
-            top.attr("data-durum", 2);
-            durumDegistirAJAX(cihazId, 2);
-            agBaglantilariniCiz();
-        }
-    });
-
-    // BAKIM BUTONU [B]
-    $(document).on("click", ".bakim-btn", function (e) {
-        if (surukleniyorMu) return;
-
-        let top = $(this).closest(".cihaz-daire");
-        let cihazId = top.attr("data-id");
-        let mevcutDurum = parseInt(top.attr("data-durum"));
-
-        if (mevcutDurum !== 3) {
-            navbarGuncelle(mevcutDurum, 3);
-            top.css({"background-color": "#fd7e14", "box-shadow": "0 0 20px #fd7e14"});
-            top.find(".daire-merkez").text("Bakım");
-            top.attr("data-durum", 3);
-            durumDegistirAJAX(cihazId, 3);
-            agBaglantilariniCiz();
-        }
-    });
-
-    function durumDegistirAJAX(id, yeniDurumId) {
+        // === ASIL OPERASYON BURADA: ARKA PLANDA SESSİZCE HABERLEŞ ===
         $.ajax({
             url: '/Cihaz/DurumGuncelle',
             type: 'POST',
-            data: { cihazId: id, yeniDurum: yeniDurumId },
-            error: function () { console.log("AJAX Hatası: Durum güncellenemedi."); }
-        });
-    }
-});
-$(document).ready(function () {
-    // 1. PANELİ AÇIP KAPATAN TETİKÇİ
-    $(".btn-yeni").on("click", function(e) {
-        e.preventDefault();
-        let panel = $("#yeniCihazPaneli");
-        if (panel.is(":visible")) {
-            panel.fadeOut(200);
-        } else {
-            panel.fadeIn(200).css("display", "flex");
-        }
-    });
+            data: { cihazId: cihazId, yeniDurum: yeniDurum },
+            success: function (res) {
+                if(res.success) {
+                    // Veritabanı onayladı, görseli değiştir!
+                    navbarGuncelle(mevcutDurum, yeniDurum);
+                    top.attr("data-durum", yeniDurum);
 
-    // 2. AĞ ÇİZİM MOTORU
-    function agBaglantilariniCiz() {
-        const svg = $("#network-cizgileri");
-        svg.empty();
-        let veriHizi = parseFloat($("#canli-hiz").text()) || 50;
-        let animSuresi = Math.max(0.2, 50 / veriHizi);
+                    if (yeniDurum === 1) {
+                        top.css({"background-color": "#198754", "box-shadow": "0 0 20px #198754"});
+                        top.find(".daire-merkez").text("Online");
+                    } else if (yeniDurum === 0) {
+                        top.css({"background-color": "#6c757d", "box-shadow": "none"});
+                        top.find(".daire-merkez").text("Offline");
+                    } else if (yeniDurum === 2) {
+                        top.css({"background-color": "#dc3545", "box-shadow": "0 0 25px #dc3545"});
+                        top.find(".daire-merkez").text("Arıza");
+                    } else if (yeniDurum === 3) {
+                        top.css({"background-color": "#fd7e14", "box-shadow": "0 0 20px #fd7e14"});
+                        top.find(".daire-merkez").text("Bakım");
+                    }
 
-        let routerlar = $(".cihaz-daire[data-turu='0']");
-        let cihazlar = $(".cihaz-daire").not("[data-turu='0']");
-
-        cihazlar.each(function () {
-            let cihaz = $(this);
-            let cX = cihaz.position().left + 50;
-            let cY = cihaz.position().top + 50;
-            let enYakin = null; let minMesafe = Infinity;
-
-            routerlar.each(function () {
-                let rX = $(this).position().left + 50;
-                let rY = $(this).position().top + 50;
-                let d = Math.sqrt(Math.pow(rX-cX, 2) + Math.pow(rY-cY, 2));
-                if (d < minMesafe) { minMesafe = d; enYakin = $(this); }
-            });
-
-            if (enYakin) {
-                let rX = enYakin.position().left + 50;
-                let rY = enYakin.position().top + 50;
-                let aktif = (cihaz.attr("data-durum") == 1 && enYakin.attr("data-durum") == 1);
-
-                let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                line.setAttribute('x1', rX); line.setAttribute('y1', rY);
-                line.setAttribute('x2', cX); line.setAttribute('y2', cY);
-                line.setAttribute('stroke', aktif ? "rgba(46, 204, 113, 0.8)" : "rgba(255, 255, 255, 0.1)");
-                line.setAttribute('stroke-width', aktif ? "3" : "1");
-                if (aktif) {
-                    line.setAttribute('stroke-dasharray', '8, 8');
-                    line.setAttribute('class', 'cizgi-aktif');
-                    line.style.animationDuration = animSuresi + "s";
+                    agBaglantilariniCiz(); // Çizgileri yeni duruma göre güncelle
+                } else {
+                    alert(res.message); // Arka kapıdan yetkisiz girene tokat
                 }
-                svg.append(line);
+            },
+            error: function () {
+                console.log("AJAX Hatası: Durum güncellenemedi.");
             }
         });
-    }
-
-    // Sürükleme ve Diğerleri
-    $(".cihaz-daire").draggable({
-        containment: ".simulasyon-alani",
-        drag: function() { agBaglantilariniCiz(); },
-        stop: function(e, ui) {
-            $.post('/Cihaz/PozisyonGuncelle', { cihazId: $(this).attr("data-id"), x: ui.position.left, y: ui.position.top });
-        }
     });
-
-    agBaglantilariniCiz();
 });
