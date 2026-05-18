@@ -6,7 +6,7 @@ public class AccountController : Controller
 {
     // Çıkış Yapma Metodu
     [HttpPost]
-    [ValidateAntiForgeryToken] // Güvenlik mührü, başkası seni uzaktan çıkaramasın diye
+    [ValidateAntiForgeryToken] // Güvenlik mührü, başkası seni uzaktan çıkaramamasını sağlıcak 
     public async Task<IActionResult> Logout()
     {
         // Tarayıcıdaki kimlik bilgilerini (Cookie) imha ediyoruz
